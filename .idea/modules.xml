@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/kotlinGradleMidiStarter.iml" filepath="$PROJECT_DIR$/.idea/modules/kotlinGradleMidiStarter.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/kotlinGradleMidiStarter_main.iml" filepath="$PROJECT_DIR$/.idea/modules/kotlinGradleMidiStarter_main.iml" group="kotlinGradleMidiStarter" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/kotlinGradleMidiStarter_test.iml" filepath="$PROJECT_DIR$/.idea/modules/kotlinGradleMidiStarter_test.iml" group="kotlinGradleMidiStarter" />
+    </modules>
+  </component>
+</project>
