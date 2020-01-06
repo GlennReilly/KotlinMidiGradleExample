@@ -3,7 +3,7 @@ import javax.sound.midi.MidiUnavailableException
 import javax.sound.midi.Synthesizer
 
 
-lateinit var midiSynth: Synthesizer
+private lateinit var midiSynth: Synthesizer
 
 fun main(args: Array<String>) {
     try {

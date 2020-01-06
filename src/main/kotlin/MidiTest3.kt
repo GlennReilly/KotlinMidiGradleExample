@@ -1,21 +1,25 @@
 import java.lang.Exception
 import javax.sound.midi.*
 import java.util.*
+import kotlin.system.exitProcess
 
 fun main(args: Array<String>) {
-    println("Enter the number of notes to be played: ")
-    val input: Scanner = Scanner(System.`in`)
-    val numOfNotes = input.nextInt()
+    //println("Enter the number of notes to be played: ")
+    //val input: Scanner = Scanner(System.`in`)
+    val numOfNotes = 1000 //input.nextInt()
 
-    val player = MidiTest2()
+    val player = MidiTest3()
     player.setUpPlayer(numOfNotes)
 }
 
-class MidiTest2 {
+class MidiTest3 {
+    private lateinit var midiSynth: Synthesizer
 
     fun setUpPlayer(numOfNotes: Int)
     {
         try {
+            midiSynth = MidiSystem.getSynthesizer().apply { open() }
+
             // A static method of MidiSystem that returns
             // a sequencer instance.
             val sequencer = MidiSystem.getSequencer()
@@ -35,13 +39,21 @@ class MidiTest2 {
             var i = 5
             while (i < (4 * numOfNotes) + 5)
             {
-                i += 4
+                val rand = Random().nextInt(10)
+                i += rand
 
                 // Add Note On event
-                track.add(makeEvent(144, 1, i, 100, i))
+                track.add(makeEvent(ShortMessage.NOTE_ON, 1, i, 100, i))
+
+                val instrumentNumber = 106
+                    val instrumentsArray = midiSynth.defaultSoundbank.instruments
+
+                val instrument = instrumentsArray[instrumentNumber]
+                track.add(makeEvent(ShortMessage.PROGRAM_CHANGE, 1, instrumentNumber, 100, i))
+                println("now playing: ${instrument.name}")
 
                 // Add Note Off event
-                track.add(makeEvent(128, 1, i, 100, i + 2))
+                track.add(makeEvent(ShortMessage.NOTE_OFF, 1, i, 100, i + 2))
             }
 
             // Setting our sequence so that the sequencer can
@@ -56,9 +68,9 @@ class MidiTest2 {
 
             while (true) {
                 // Exit the program when sequencer has stopped playing.
-                if (!sequencer.isRunning()) {
+                if (!sequencer.isRunning) {
                     sequencer.close()
-                    System.exit(1)
+                    exitProcess(1)
                 }
             }
         }
@@ -74,12 +86,12 @@ class MidiTest2 {
         try {
             // ShortMessage stores a note as command type, channel,
             // instrument it has to be played on and its speed.
-            val a: ShortMessage = ShortMessage()
-            a.setMessage(command, channel, note, velocity)
+            val shortMessage = ShortMessage()
+            shortMessage.setMessage(command, channel, note, velocity)
 
             // A midi event is comprised of a short message(representing
             // a note) and the tick at which that note has to be played
-            event = MidiEvent(a, tick.toLong())
+            event = MidiEvent(shortMessage, tick.toLong())
         }
         catch (ex: Exception) {
             ex.printStackTrace()
