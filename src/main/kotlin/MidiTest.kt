@@ -1,8 +1,6 @@
 import javax.sound.midi.MidiSystem
 import javax.sound.midi.MidiUnavailableException
-import javax.sound.midi.Soundbank
 import javax.sound.midi.Synthesizer
-import javax.sound.sampled.spi.AudioFileReader
 
 
 lateinit var midiSynth: Synthesizer
@@ -13,7 +11,8 @@ fun main(args: Array<String>) {
 
         (0..128).forEach {
             println("it: $it")
-            PlayPhrase(it)
+            playDrums()
+            playPhrase(it)
         }
 
     } catch (ex: MidiUnavailableException) {
@@ -25,7 +24,30 @@ fun main(args: Array<String>) {
     //val audioFileReader = AudioFileReader()
 }
 
-private fun PlayPhrase(instrumentNumber: Int) {
+private fun playDrums() {
+    println("Playing drums")
+    val synthDrum = 117
+
+    repeat(4) {
+        playNote(
+                synthDrum,
+                1,
+                noteNumber = 60,
+                noteVelocity = 100,
+                holdNoteTime = 100
+        )
+
+        playNote(
+                synthDrum,
+                1,
+                noteNumber = 60,
+                noteVelocity = 0,
+                holdNoteTime = 300
+        )
+    }
+}
+
+private fun playPhrase(instrumentNumber: Int) {
     playNote(
             instrumentNumber,
             0,
