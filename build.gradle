@@ -6,7 +6,7 @@ buildscript {
     }
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-    }
+  }
 }
 
 group 'com.bluemongo'
@@ -20,6 +20,10 @@ repositories {
 
 dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+    //implementation files('libs/jfugue-5.0.9.jar')
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+
     testCompile 'io.kotlintest:kotlintest-runner-junit5:3.1.0'
 }
 
