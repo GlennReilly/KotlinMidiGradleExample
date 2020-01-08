@@ -1,11 +1,77 @@
 import org.jfugue.pattern.Pattern
 import org.jfugue.player.Player
+import org.jfugue.rhythm.Rhythm
+import org.jfugue.theory.ChordProgression
+import org.jfugue.theory.Key
+import org.jfugue.theory.Note
 import org.staccato.ReplacementMapPreprocessor
 import java.util.*
 
 
 fun main(args: Array<String>) {
+    //playFractalMusic()
+    //playBasicExample()
+    //playPattern()
+    //playRhythm()
+    //playRhythm2()
+    //playChordProgression()
+    playChordProgression2()
+}
 
+private fun playChordProgression2() {
+    val cp = ChordProgression("VII I V II III IV VII")
+    val player = Player()
+    player.play(cp.setKey("Dmaj"))
+}
+
+private fun playChordProgression() {
+    val cp = ChordProgression("I IV V")
+    val player = Player()
+    player.play(cp)
+
+    /*
+    player.play(cp.eachChordAs("$0q $1q $2q Rq"))
+    player.play(cp.allChordsAs("$0q $0q $0q $0q $1q $1q $2q $0q"))
+    player.play(cp.allChordsAs("$0 $0 $0 $0 $1 $1 $2 $0").eachChordAs("V0 $0s $1s $2s Rs V1 $!q"))
+    */
+}
+
+private fun playRhythm2() {
+    val rhythm = Rhythm()
+            .addLayer("O..oO...O..oOO..")
+            .addLayer("..S...S...S...S.")
+            .addLayer("````````````````")
+            .addLayer("...............+")
+    Player().play(rhythm.pattern.repeat(2))
+}
+
+private fun playRhythm() {
+    val rhythm = Rhythm()
+            .addLayer("O..oO...O..oOO..") // This is Layer 0
+            .addLayer("..S...S...S...S.")
+            .addLayer("````````````````")
+            .addLayer("...............+") // This is Layer 3
+            .addOneTimeAltLayer(3, 3, "...+...+...+...+") // Replace Layer 3 with this string on the 4th (count from 0) measure
+            .setLength(4) // Set the length of the rhythm to 4 measures
+
+    Player().play(rhythm.pattern.repeat(2)) // Play 2 instances of the 4-measure-long rhythm
+}
+
+private fun playPattern() {
+    val noteString = Note.getToneString(60)
+    println("noteString: $noteString")
+    val p1 = Pattern("V0 I[Piano] Eq Ch. | Eq Ch. | Dq Eq Dq Cq")
+    val p2 = Pattern("V1 I[Flute] Rw     | Rw     | GmajQQQ  CmajQ")
+    val player = Player()
+    player.play(p1, p2)
+}
+
+private fun playBasicExample() {
+    val player = Player()
+    player.play("C D E F G A B")
+}
+
+private fun playFractalMusic() {
     // Specify the transformation rules for this Lindenmayer system
     val rules: MutableMap<String, String> = object : HashMap<String, String>() {
         init {
@@ -40,45 +106,4 @@ fun main(args: Array<String>) {
     val player = Player()
     println(rmp.preprocess(axiom.toString(), null))
     player.play(axiom)
-
-    //val player = Player()
-    //player.play("C D E F G A B")
-
-/*
-    val noteString = Note.getToneString(60)
-    println("noteString: $noteString")
-    val p1 = Pattern("V0 I[Piano] Eq Ch. | Eq Ch. | Dq Eq Dq Cq")
-    val p2 = Pattern("V1 I[Flute] Rw     | Rw     | GmajQQQ  CmajQ")
-    val player = Player()
-    player.play(p1, p2)}*/
-
-/*    val rhythm = Rhythm()
-            .addLayer("O..oO...O..oOO..") // This is Layer 0
-            .addLayer("..S...S...S...S.")
-            .addLayer("````````````````")
-            .addLayer("...............+") // This is Layer 3
-            .addOneTimeAltLayer(3, 3, "...+...+...+...+") // Replace Layer 3 with this string on the 4th (count from 0) measure
-            .setLength(4) // Set the length of the rhythm to 4 measures
-
-    Player().play(rhythm.pattern.repeat(2)) // Play 2 instances of the 4-measure-long rhythm*/
-
-
-/*    val rhythm = Rhythm()
-            .addLayer("O..oO...O..oOO..")
-            .addLayer("..S...S...S...S.")
-            .addLayer("````````````````")
-            .addLayer("...............+")
-    Player().play(rhythm.pattern.repeat(2))*/
-
-/*    val cp = ChordProgression("I IV V")
-
-    val player = Player()
-    player.play(cp)*/
-
-
-/*    player.play(cp.eachChordAs("$0q $1q $2q Rq"))
-
-    player.play(cp.allChordsAs("$0q $0q $0q $0q $1q $1q $2q $0q"))
-
-    player.play(cp.allChordsAs("$0 $0 $0 $0 $1 $1 $2 $0").eachChordAs("V0 $0s $1s $2s Rs V1 $!q"))*/
 }
