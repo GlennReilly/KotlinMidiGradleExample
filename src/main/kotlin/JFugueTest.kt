@@ -2,7 +2,6 @@ import org.jfugue.pattern.Pattern
 import org.jfugue.player.Player
 import org.jfugue.rhythm.Rhythm
 import org.jfugue.theory.ChordProgression
-import org.jfugue.theory.Key
 import org.jfugue.theory.Note
 import org.staccato.ReplacementMapPreprocessor
 import java.util.*
@@ -20,8 +19,14 @@ fun main(args: Array<String>) {
 
 private fun playChordProgression2() {
     val cp = ChordProgression("VII I V II III IV VII")
+    val rhythm = Rhythm()
+            .addLayer("O..oO...O..oOO..")
+            .addLayer("..S...S...S...S.")
+            .addLayer("````````````````")
+            .addLayer("...............+")
+
     val player = Player()
-    player.play(cp.setKey("Dmaj"))
+    player.play(cp.setKey("Dmaj").pattern.setTempo(70), rhythm.pattern.repeat(2))
 }
 
 private fun playChordProgression() {
