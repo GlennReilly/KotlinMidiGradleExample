@@ -14,8 +14,58 @@ fun main(args: Array<String>) {
     //playRhythm()
     //playRhythm2()
     //playChordProgression()
-    playChordProgression2()
+    playChordProgression3()
 }
+
+private const val keyToPlay = "Dmaj"
+private const val bpm = 100
+private const val repeats = 4
+
+val chordList = listOf("I", "ii", "iii", "IV", "V", "vi", "vii")
+val randomChord
+        get() = chordList.shuffled().first()
+
+private fun playChordProgression3() {
+
+    val randomChord2 = chordList.shuffled().first()
+
+    val allChordsInKey  = ChordProgression(chordList.joinToString()).setKey(keyToPlay)
+    println("allChordsInKey $keyToPlay: $allChordsInKey")
+/*    val cp = ChordProgression("VII I V D#5s iii iv7 V ii vi $randomChord")
+            .setKey(keyToPlay)
+    println("cp.chords in $keyToPlay: ${cp.chords.asList().joinToString()}")*/
+
+    val chords = "C#5MAJ D4MAJh A4MAJ D4MAJh F#4MIN A4MAJh A4MAJq E4MINhq"
+
+    val melody = Pattern(
+            "Rw     | Rw     | Rw     | Rq B5Q A5Q Rq C#QQ  | Rw  | Rq | A4QQ Rq F#4HH" +
+            "Rw     | Rw     | Rw     | Rq B4QQ Rq F#4QQ | Rw  | Rq | f#QQ Rq B4HH")
+            .setVoice(1).setInstrument("Flute")
+
+    val bassLine = Pattern("X[Volume]=11200 Rh A3QQ Rq C#4QQ | D4QQ Rq F#3HH")
+            .setVoice(2).setInstrument("Acoustic_Bass")
+
+    val rhythm = Rhythm()
+            .addLayer("O..oO...O..oOO..")
+            .addLayer("..S...S...S...S.")
+            .addLayer("````````````````")
+            .addLayer("...............+")
+
+    //val x: Pattern = cp.setKey(keyToPlay).pattern.setTempo(bpm).repeat(repeats)
+    val chordProgression = Pattern(chords).setTempo(bpm)
+
+    println("chords: $chords")
+
+    val player = Player()
+    player.play(
+            chordProgression.repeat(20),
+            melody.repeat(repeats)
+            //,
+            //bassLine.repeat(20),
+            //rhythm.pattern.repeat(20)
+     )
+}
+
 
 private fun playChordProgression2() {
     val cp = ChordProgression("VII I V II III IV VII")
@@ -26,7 +76,7 @@ private fun playChordProgression2() {
             .addLayer("...............+")
 
     val player = Player()
-    player.play(cp.setKey("Dmaj").pattern.setTempo(70), rhythm.pattern.repeat(2))
+    player.play(cp.setKey(keyToPlay).pattern.setTempo(bpm), rhythm.pattern.repeat(2))
 }
 
 private fun playChordProgression() {
