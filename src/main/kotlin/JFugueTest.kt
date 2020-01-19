@@ -14,16 +14,140 @@ fun main(args: Array<String>) {
     //playRhythm()
     //playRhythm2()
     //playChordProgression()
-    playChordProgression3()
+    //playChordProgression3()
+    playRandomProgression()
 }
 
-private const val keyToPlay = "Dmaj"
-private const val bpm = 100
+private val keyToPlay = listOf("Dmaj", "Amin", "Dmin").shuffled().first()
+private val bpm = listOf(120, 100, 90, 80, 70).shuffled().first()
 private const val repeats = 4
 
 val chordList = listOf("I", "ii", "iii", "IV", "V", "vi", "vii")
-val randomChord
-        get() = chordList.shuffled().first()
+
+val randomChordProgression
+    get() = chordList.shuffled().take(4)
+
+val randomMelody
+get() = listOf("C", "D", "E", "F", "G", "A", "B").shuffled().take(8)
+
+val bassInstrument
+    get() = listOf(
+            "Fretless_Bass",
+            "Synth_Bass_1",
+            "Synth_Bass_2").shuffled().first()
+
+val melodicInstrument
+    get() = listOf("Glockenspiel",
+            "Guitar_harmonics",
+            "Trumpet",
+            "Muted_Trumpet",
+            "Oboe",
+            "Shakuhachi",
+            "Sitar",
+            "Pan_Flute").shuffled().first()
+
+val rhythmInstrument
+    get() = listOf("Rock_Organ",
+            "Voice_Oohs",
+            "Choir_Aahs",
+            "Brass_Section").shuffled().first()
+
+private fun playRandomProgression() {
+    val allChordsInKey  = ChordProgression(chordList.joinToString()).setKey(keyToPlay)
+    println("allChordsInKey $keyToPlay: $allChordsInKey")
+
+    val rhythm = Rhythm()
+            .addLayer("O..oO...O..oOO..")
+            .addLayer("..S...S...S...S.")
+            .addLayer("````````````````")
+            .addLayer("...............+")
+
+    val chordProgression1 = Pattern(ChordProgression(randomChordProgression.joinToString())
+            .eachChordAs("$!w"))
+            .setTempo(bpm)
+            .repeat(4)
+            .setInstrument(rhythmInstrument)
+
+    println("rhythmInstrument: $rhythmInstrument")
+    
+    val chordProgression2 = Pattern(ChordProgression(randomChordProgression.joinToString())
+            .eachChordAs("$!w"))
+            .setTempo(bpm)
+            .repeat(2)
+
+    val chordProgression3 = Pattern(ChordProgression(randomChordProgression.joinToString())
+            .eachChordAs("$!w"))
+            .setTempo(bpm)
+            .repeat(2)
+
+    val melody1 = Pattern(randomMelody.joinToString()).addToEachNoteToken("$!q")
+            .setTempo(bpm)
+            .repeat(2)
+            .setVoice(2)
+            .setInstrument(melodicInstrument)
+
+    println("melodicInstrument: $melodicInstrument")
+
+    val melody2 = Pattern(randomMelody.joinToString()).addToEachNoteToken("$!q")
+            .setTempo(bpm)
+            .repeat(1)
+            .setVoice(2)
+
+    val melody3 = Pattern(randomMelody.joinToString())
+            .addToEachNoteToken("$!q")
+            .setTempo(bpm)
+            .repeat(2)
+            .setVoice(2)
+
+    val rest = Pattern("Rw Rw Rw Rw")
+            .repeat(2)
+            .setVoice(2)
+
+    val bass1 = Pattern(randomMelody.joinToString(separator = " "))
+            .addToEachNoteToken("2$!q")
+            .setTempo(bpm)
+            .repeat(40)
+            .setVoice(3)
+            .setInstrument(bassInstrument)
+
+    println("bassInstrument: $bassInstrument")
+
+    println("bpm: $bpm")
+
+    println("chordProgression1: $chordProgression1")
+    println("chordProgression2: $chordProgression2")
+    println("chordProgression3: $chordProgression3")
+
+    println("melody1: $melody1")
+    println("melody2: $melody2")
+    println("melody3: $melody3")
+
+    println("bass1: $bass1")
+
+    val player = Player()
+    player.play(
+            chordProgression1,
+            chordProgression2,
+            chordProgression1,
+            chordProgression2,
+            chordProgression3,
+            chordProgression1,
+            rest,
+            melody1,
+            melody2,
+            melody1,
+            melody3,
+            rest,
+            melody2,
+            melody3,
+            melody1,
+            melody1,
+            bass1,
+            rhythm.pattern.repeat(40)
+     )
+}
+
+
 
 private fun playChordProgression3() {
 
@@ -39,7 +163,7 @@ private fun playChordProgression3() {
 
     val melody = Pattern(
             "Rw     | Rw     | Rw     | Rq B5Q A5Q Rq C#QQ  | Rw  | Rq | A4QQ Rq F#4HH" +
-            "Rw     | Rw     | Rw     | Rq B4QQ Rq F#4QQ | Rw  | Rq | f#QQ Rq B4HH")
+                    "Rw     | Rw     | Rw     | Rq B4QQ Rq F#4QQ | Rw  | Rq | f#QQ Rq B4HH")
             .setVoice(1).setInstrument("Flute")
 
     val bassLine = Pattern("X[Volume]=11200 Rh A3QQ Rq C#4QQ | D4QQ Rq F#3HH")
@@ -63,9 +187,8 @@ private fun playChordProgression3() {
             //,
             //bassLine.repeat(20),
             //rhythm.pattern.repeat(20)
-     )
+    )
 }
-
 
 private fun playChordProgression2() {
     val cp = ChordProgression("VII I V II III IV VII")
